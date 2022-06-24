@@ -310,13 +310,13 @@ func (r *Registry) Register(c Collector) error {
 		// First check existing descriptors...
 		if dimHash, exists := r.dimHashesByName[desc.fqName]; exists {
 			if dimHash != desc.dimHash {
-				return fmt.Errorf("a previously registered descriptor with the same fully-qualified name as %s has different label names or a different help string", desc)
+				//return fmt.Errorf("a previously registered descriptor with the same fully-qualified name as %s has different label names or a different help string", desc)
 			}
 		} else {
 			// ...then check the new descriptors already seen.
 			if dimHash, exists := newDimHashesByName[desc.fqName]; exists {
 				if dimHash != desc.dimHash {
-					return fmt.Errorf("descriptors reported by collector have inconsistent label names or help strings for the same fully-qualified name, offender is %s", desc)
+					//return fmt.Errorf("descriptors reported by collector have inconsistent label names or help strings for the same fully-qualified name, offender is %s", desc)
 				}
 			} else {
 				newDimHashesByName[desc.fqName] = desc.dimHash
@@ -365,7 +365,7 @@ func (r *Registry) Unregister(c Collector) bool {
 		descChan    = make(chan *Desc, capDescChan)
 		descIDs     = map[uint64]struct{}{}
 		collectorID uint64 // All desc IDs XOR'd together.
-		nameHashMap = map[string]uint64{}
+		//nameHashMap = map[string]uint64{}
 	)
 	go func() {
 		c.Describe(descChan)
@@ -376,9 +376,9 @@ func (r *Registry) Unregister(c Collector) bool {
 			collectorID ^= desc.id
 			descIDs[desc.id] = struct{}{}
 		}
-		if _, exists := nameHashMap[desc.fqName]; !exists {
-			nameHashMap[desc.fqName] = desc.dimHash
-		}
+		//if _, exists := nameHashMap[desc.fqName]; !exists {
+		//	nameHashMap[desc.fqName] = desc.dimHash
+		//}
 	}
 
 	r.mtx.RLock()
@@ -397,10 +397,10 @@ func (r *Registry) Unregister(c Collector) bool {
 	}
 	// dimHashesByName is left untouched as those must be consistent
 	// throughout the lifetime of a program.
-	// 删除dimHash
-	for fqName := range nameHashMap {
-		delete(r.dimHashesByName, fqName)
-	}
+	//// 删除dimHash
+	//for fqName := range nameHashMap {
+	//	delete(r.dimHashesByName, fqName)
+	//}
 	return true
 }
 

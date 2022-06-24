@@ -95,6 +95,10 @@ func (g *gauge) Set(val float64) {
 	atomic.StoreUint64(&g.valBits, math.Float64bits(val))
 }
 
+func (g *gauge) Get() float64 {
+	return math.Float64frombits(g.valBits)
+}
+
 func (g *gauge) SetToCurrentTime() {
 	g.Set(float64(time.Now().UnixNano()) / 1e9)
 }
