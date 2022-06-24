@@ -132,7 +132,7 @@ func NewDesc(fqName, help string, variableLabels []string, constLabels Labels) *
 	}
 
 	xxh := xxhash.New()
-	for _, val := range labelNames {
+	for _, val := range labelValues {
 		xxh.WriteString(val)
 		xxh.Write(separatorByteSlice)
 	}
