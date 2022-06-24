@@ -35,6 +35,8 @@ type Gauge interface {
 
 	// Set sets the Gauge to an arbitrary value.
 	Set(float64)
+	// Get Last set value
+	Get() float64
 	// Inc increments the Gauge by 1. Use Add to increment it by arbitrary
 	// values.
 	Inc()
