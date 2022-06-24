@@ -136,6 +136,10 @@ func NewDesc(fqName, help string, variableLabels []string, constLabels Labels) *
 		xxh.WriteString(val)
 		xxh.Write(separatorByteSlice)
 	}
+	for _, val := range labelNames {
+		xxh.WriteString(val)
+		xxh.Write(separatorByteSlice)
+	}
 	d.id = xxh.Sum64()
 	// Sort labelNames so that order doesn't matter for the hash.
 	sort.Strings(labelNames)
