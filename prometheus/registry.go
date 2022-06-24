@@ -365,6 +365,7 @@ func (r *Registry) Unregister(c Collector) bool {
 		descChan    = make(chan *Desc, capDescChan)
 		descIDs     = map[uint64]struct{}{}
 		collectorID uint64 // All desc IDs XOR'd together.
+		nameHashMap = map[string]uint64{}
 	)
 	go func() {
 		c.Describe(descChan)
@@ -374,6 +375,9 @@ func (r *Registry) Unregister(c Collector) bool {
 		if _, exists := descIDs[desc.id]; !exists {
 			collectorID ^= desc.id
 			descIDs[desc.id] = struct{}{}
+		}
+		if _, exists := nameHashMap[desc.fqName]; !exists {
+			nameHashMap[desc.fqName] = desc.dimHash
 		}
 	}
 
@@ -393,6 +397,10 @@ func (r *Registry) Unregister(c Collector) bool {
 	}
 	// dimHashesByName is left untouched as those must be consistent
 	// throughout the lifetime of a program.
+	// 删除dimHash
+	for fqName := range nameHashMap {
+		delete(r.dimHashesByName, fqName)
+	}
 	return true
 }
 
